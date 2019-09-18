@@ -1,0 +1,29 @@
+.row {
+    margin-top: 40px;
+}
+
+.danger {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.container {
+    margin: 100px;
+}
+
+.col-6 {
+    margin-top: 20px;
+}
+
+#span {
+    font-size: 30px;
+    font-family: "Times New Roman", Times, serif;
+    text-align: center;
+}
+
+h2{
+    font-family: "Times New Roman", Times, serif;
+}

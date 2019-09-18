@@ -1,0 +1,8 @@
+node_modules/
+.vscode
+package-lock.json
+public/static/
+config/awsConfig
+config/gitConfig
+aws/
+logs/

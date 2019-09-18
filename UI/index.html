@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+        <div class="row">
+            <div class="col-12 col-md-12">
+                <img src="http://localhost:8383/images/3clogic.png">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-12">
+                <h2>CI and CD Lambda Execution App</h2>
+            </div>
+        </div>
+
+        <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button type="button" class="btn btn-primary" id="sync">Pull Files</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <select class="custom-select" id="selectOne">
+                    <option selected>selected</option>
+
+                </select>
+            </div>
+            <div class="col-6 col-md-3">
+                <input class="form-control" id="selectedDir" value="" disabled />
+            </div>
+            <div class="col-6 col-md-3">
+                <button type="button" class="btn btn-primary" id="deploy" disabled>Deploy</button>
+            </div>
+        </div>
+
+        <!-- Columns are always 50% wide, on mobile and desktop -->
+        <div class="row">
+            
+            <div class="col-12 col-md-12">
+                <div class="progress">
+                    <div id='progress_bar' class="progress-bar bg-success" role="progressbar" aria-valuemax="100"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-2">
+
+            </div>
+            <div class="col-12 col-md-8">
+                <span id="span"></span>
+            </div>
+            <div class="col-12 col-md-2">
+
+            </div>
+        </div>
+        <script src="ui.js"></script>
+</body>
+
+</html>
