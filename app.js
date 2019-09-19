@@ -49,15 +49,6 @@ router.get('/pullfiles', function (req, res) {
     pullFilesFromDev.devRepository()
     .then(data => { res.status(200).json(data); logger.info(data) })
     .catch(err => { res.status(400).json(err); logger.info(err) });
-    // pullFilesFromDev.pullFilesFromDevRepo(function (err, response) {
-    //     if (err) {
-    //         logger.error(err);
-    //         res.status(500).send(err);
-    //     } else {
-    //         logger.info(response);
-    //         res.status(200).send(response);
-    //     }
-    // });
 });
 
 router.post('/deploy/:dirName', function (req, res) {

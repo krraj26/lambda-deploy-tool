@@ -45,7 +45,7 @@ var pullAwsRepo = function () {
 
                 reject(err);
             }
-            else if (!fs.existsSync(directoryPath + '/lambda-pipeline-repo-pst')) {
+            else if (!fs.existsSync(lambdaDir)) {
                 let obj = JSON.parse(data);
                 let awsCredential = `${obj.repository}`;
 
@@ -54,10 +54,10 @@ var pullAwsRepo = function () {
                     .then(() => resolve("Aws repository cloned"))
                     .catch(err => reject(err));
             }
-            else if (fs.existsSync(directoryPath + '/lambda-pipeline-repo-pst')) {
+            else if (fs.existsSync(lambdaDir)) {
 
-                require('simple-git/promise')(directoryPath + '/lambda-pipeline-repo-pst')
-                    
+                git(lambdaDir)
+                    .reset('--hard')
                     .pull((err, update) => {
                         if (update && update.summary.changes) {
                             require('child_process').exec('npm restart');
@@ -101,7 +101,6 @@ var copyFilesIntoAwsRepo = function (dirName) {
     return new Promise((resolve, reject) => {
 
         var awsRepo = directoryPath + "/" + "DeveloperRepo" + "/" + dirName;
-        var array = [];
 
         fs.readdir(awsRepo, function (err, files) {
             if (err) {
@@ -109,12 +108,11 @@ var copyFilesIntoAwsRepo = function (dirName) {
                 reject(err);
             }
             else {
-                files.forEach(function (fileName) {
-
+                files.forEach(function (fileName) 
+                {
                     var filePath = path.join(awsRepo, fileName);
                     var stat = fs.statSync(filePath);
                     if (stat.isFile()) {
-                        array.push({ fileName: fileName, filePath: filePath });
                         var dotIndex = fileName.lastIndexOf(".");
                         var name = fileName.slice(0, dotIndex);
                         var newName = name + path.extname(fileName);
@@ -123,7 +121,7 @@ var copyFilesIntoAwsRepo = function (dirName) {
                         read.pipe(write);
                     }
                 });
-                resolve(array);
+                resolve("File copied successfully");
             }
         });
     })
@@ -143,7 +141,7 @@ var buildconversion = function () {
                     "build": {
                         "commands": [
                             "npm install",
-                            "export BUCKET=-pipeine-s3-pst",
+                            "export BUCKET=lambda-pipeine-s3-pst",
                             "aws cloudformation package --template-file template.yaml --s3-bucket $BUCKET --output-template-file outputtemplate.yaml"
                         ]
                     }
@@ -189,7 +187,6 @@ var templateConverion = function () {
                         let getData = JSON.parse(data);
                         let status = getData.statusCode;
 
-                        // console.log(status);
                         var i = 0;
                         var integrationResponses = [];
                         for (var j = 0; j < status.length; j++) {
@@ -198,20 +195,6 @@ var templateConverion = function () {
                             }
                             integrationResponses.push(obj);
                         }
-                        //console.log(integrationResponses);
-                        //var params = getData.queryParameter;
-                        //console.log(params)
-
-                        // var parameters = [];
-                        // for (var j = 0; j < params.length; j++) {
-                        //     var obj = params[j]
-                        //     parameters.push(obj);
-                        // }
-                        // //console.log(parameters);
-
-                        // var queryParam = {};
-                        // queryParam[getData.method] = { "parameters": parameters }
-
                         var resources = {};
                         resources[getData.lambda] = {
                             "Type": "AWS::Serverless::Function",
@@ -224,24 +207,15 @@ var templateConverion = function () {
                                         "Type": "Api",
                                         "Properties": {
                                             "Path": getData.path,
-                                            "Method": getData.method
+                                            "Method": getData.method,  
                                         },
-
                                         "Integration": {
-                                            "CacheKeyParameters": [
-                                                "method.request.path.proxy"
-                                            ],
-                                            "RequestParameters": {
-                                                "integration.request.path.proxy": "method.request.path.proxy"
-                                            },
-
                                             "Type": "AWS_PROXY",
-                                            "PassthroughBehavior": "WHEN_NO_MATCH",
-                                            "IntegrationResponses": integrationResponses
-                                        }
+                                            "MethodResponses" : integrationResponses
+                                          },
+                                          
                                     }
                                 }
-
                             }
                         };
                         var template = {
@@ -308,7 +282,6 @@ var pipelineExecute = function () {
         codepipeline.startPipelineExecution(params, function (err, data) {
             if (err) { reject("pipeline error" + err, null) }
             else {
-                //console.log("new1" +data);
                 resolve('AWS pipeline run Successfully ');
             }
         });
